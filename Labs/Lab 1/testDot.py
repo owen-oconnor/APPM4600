@@ -23,7 +23,7 @@ def driver():
     print(f'The matrix product with built in numpy function is {np.matmul(A,B)}') # evaluate same matrix product using built in numpy function
 
     C = np.array([[1,2,3], [4,5,6], [7,8,9]])
-    D = np.array([[9,8,7], [6,5,4], [3,2,1]])
+    D = np.array([[9,8,7], [6,5,4], [3,2,1]]) # use same test for 3x3 matrices
     matrix_prod_3x3 = matrixmult(C,D)
     print(f'The matrix product of C and D is {matrix_prod_3x3}')
     print(f'The matrix product of C/D with built in func is {np.matmul(C,D)}')
