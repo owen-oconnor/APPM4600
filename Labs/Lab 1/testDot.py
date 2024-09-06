@@ -44,7 +44,7 @@ def matrixmult(A, B):
 
     is_rectangular = True
 
-    for r, s in zip(A, B):
+    for r, s in zip(A, B): # check to ensure matrix multiplication is applicable for given matrices
         if len(r) != cols_A or len(s) != cols_B:
             is_rectangular = False
 
