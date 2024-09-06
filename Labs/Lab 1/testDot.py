@@ -53,7 +53,7 @@ def matrixmult(A, B):
 
     result = [[0 for _ in range(cols_B)] for _ in range(rows_A)]
 
-    for i in range(rows_A):
+    for i in range(rows_A): # loops through A and B, computing matrix elements and inserting them into the correct index of the preconstructed result
         for j in range(cols_B):
             for k in range(cols_A):
                 result[i][j] += A[i][k] * B[k][j]
