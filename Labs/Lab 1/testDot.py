@@ -18,7 +18,7 @@ def driver():
     A = np.array([[1,2], [3,4]])
     B = np.array([[5,6], [7,8]])
 
-    matrix_prod = matrixmult(A, B)
+    matrix_prod = matrixmult(A, B) # test matrix multiplication code with 2x2 matrices
     print(f'The matrix product is {matrix_prod}')
     print(f'The matrix product with built in numpy function is {np.matmul(A,B)}')
 
