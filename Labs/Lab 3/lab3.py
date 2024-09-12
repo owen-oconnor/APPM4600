@@ -48,3 +48,8 @@ f3 = lambda x: ((x-1)**2)*(x-3)
 f4 = lambda x: np.sin(x)
 
 tolerance = 10**(-5)
+
+f5 = lambda x: x*(1+(7-x**5)/(x**2))**3
+f6 = lambda x: x - (x**5 - 7)/(x**2)
+f7 = lambda x: x - (x**5 - 7)/(5*x**4)
+f8 = lambda x: x - (x**5 - 7)/(12)
