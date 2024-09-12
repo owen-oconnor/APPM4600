@@ -101,20 +101,50 @@ root, error = bisection(f4, a, b, tolerance)
 print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 
 
-# exercise 3a 
-exercise = '3a'
+##################################################
+'''Fixed Point Eval'''
 x0 = 1
 tolerance = 10**(-10)
 Nmax = 100
 test_x = 7**(1/5)
 
-check = f5(test_x) - test_x # check if test_x is a fixed point
-print(check)
-fp, error = fixed_point(f5, x0, tolerance, Nmax)
-print(f'Exercise {exercise}: The approximate fixed point w/ inital guess of {x0} is {fp}')
+# exercise 3a: use function f5 
+exercise = '3a'
+check = f5(test_x)
+if abs(check - test_x) < tolerance:
+    print(f'Ex {exercise}: {test_x} is a verified fixed point of function')
+try:
+    fp, error = fixed_point(f5, x0, tolerance, Nmax)
+    print(f'Exercise {exercise}: The approximate fixed point w/ inital guess of {x0} is {fp}')
+except OverflowError:
+    print(f'Ex {exercise}: Algorithm diverges, unable to approx fixed point')
 
-# exercise 3b:
+# exercise 3b: use function f6, other parameters unchanged
 exercise = '3b'
+if abs(check - test_x) < tolerance:
+    print(f'Ex {exercise}: {test_x} is a verified fixed point of function')
+try:
+    fp, error = fixed_point(f6, x0, tolerance, Nmax)
+    print(f'Exercise {exercise}: The approximate fixed point w/ inital guess of {x0} is {fp}')
+except OverflowError:
+    print(f'Ex {exercise}: Algorithm diverges, unable to approx fixed point')
 
-#exercise 3c:
-exericse = '3c'
+#exercise 3c: use function f7
+exercise = '3c'
+if abs(check - test_x) < tolerance:
+    print(f'Ex {exercise}: {test_x} is a verified fixed point of function')
+try:
+    fp, error = fixed_point(f7, x0, tolerance, Nmax)
+    print(f'Exercise {exercise}: The approximate fixed point w/ inital guess of {x0} is {fp}')
+except OverflowError:
+    print(f'Ex {exercise}: Algorithm diverges, unable to approx fixed point')
+
+# exercise 3d: use function f8
+exercise = '3d'
+if abs(check - test_x) < tolerance:
+    print(f'Ex {exercise}: {test_x} is a verified fixed point of function')
+try:
+    fp, error = fixed_point(f8, x0, tolerance, Nmax)
+    print(f'Exercise {exercise}: The approximate fixed point w/ inital guess of {x0} is {fp}')
+except OverflowError:
+    print("Algorithm diverges, unable to approx fixed point")
