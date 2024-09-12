@@ -101,3 +101,20 @@ root, error = bisection(f4, a, b, tolerance)
 print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 
 
+# exercise 3a 
+exercise = '3a'
+x0 = 1
+tolerance = 10**(-10)
+Nmax = 100
+test_x = 7**(1/5)
+
+check = f5(test_x) - test_x # check if test_x is a fixed point
+print(check)
+fp, error = fixed_point(f5, x0, tolerance, Nmax)
+print(f'Exercise {exercise}: The approximate fixed point w/ inital guess of {x0} is {fp}')
+
+# exercise 3b:
+exercise = '3b'
+
+#exercise 3c:
+exericse = '3c'
