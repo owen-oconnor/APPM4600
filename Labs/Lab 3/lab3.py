@@ -56,16 +56,48 @@ f7 = lambda x: x - (x**5 - 7)/(5*x**4)
 f8 = lambda x: x - (x**5 - 7)/(12)
 
 # exercise 1a: use f1, a=0.5, b=2
-
-root, error = bisection(f1, 0.5, 2, tolerance)
-print(f'The approximate root beteen x=0.5, x=2 is {root}')
+exercise = '1a'
+a = 0.5
+b = 2
+root, error = bisection(f1, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 
 # exercise 1b: use f1, a=-1, b=0.5
-root, error = bisection(f1, -1, 0.5, tolerance)
-print(f'The approximate root beteen x=-1, x=0.5 is {root}')
+exercise = '1b'
+a = -1
+b = 0.5
+root, error = bisection(f1, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 #Unable to find double root at x = 0 because there is no sign change
 
 # exercise 1c: use f1, a=-1, b=2
-root, error = bisection(f1, -1, 2, tolerance)
-print(f'The approximate root beteen x=-1, x=2 is {root}')
+exercise = '1c'
+a = -1
+b = 2
+root, error = bisection(f1, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 # only able to find one of the two roots in this interval
+
+# exercise 2a: use f2, a = 0, b = 2.4 and same tolerance as above
+exercise = '2a'
+a = 0
+b = 2.4
+root, error = bisection(f2, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
+
+
+# exercise 2b: use f3, a = 0, b = 2 and same tolerance as above
+exercise = '2b'
+a = 0
+b = 2
+root, error = bisection(f3, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
+
+# exercise 2c: use f4, a = 0, b = 0.1 and same tolerance as above
+exercise = '2c'
+a = 0
+b = 0.1
+root, error = bisection(f4, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
+
+
