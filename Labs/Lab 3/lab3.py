@@ -6,7 +6,8 @@ def bisection(f, a, b, tol):
 
     if fa*fb > 0:
         err = 1
-        return err
+        root = "no root found"
+        return root, err
     
     d = 0.5*(a+b)
     while abs(d-a) > tol:
@@ -53,3 +54,18 @@ f5 = lambda x: x*(1+(7-x**5)/(x**2))**3
 f6 = lambda x: x - (x**5 - 7)/(x**2)
 f7 = lambda x: x - (x**5 - 7)/(5*x**4)
 f8 = lambda x: x - (x**5 - 7)/(12)
+
+# exercise 1a: use f1, a=0.5, b=2
+
+root, error = bisection(f1, 0.5, 2, tolerance)
+print(f'The approximate root beteen x=0.5, x=2 is {root}')
+
+# exercise 1b: use f1, a=-1, b=0.5
+root, error = bisection(f1, -1, 0.5, tolerance)
+print(f'The approximate root beteen x=-1, x=0.5 is {root}')
+#Unable to find double root at x = 0 because there is no sign change
+
+# exercise 1c: use f1, a=-1, b=2
+root, error = bisection(f1, -1, 2, tolerance)
+print(f'The approximate root beteen x=-1, x=2 is {root}')
+# only able to find one of the two roots in this interval
