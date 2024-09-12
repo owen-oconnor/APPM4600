@@ -9,6 +9,15 @@ def bisection(f, a, b, tol):
         root = "no root found"
         return root, err
     
+    if fa == 0:
+        root = fa
+        err = 0
+        return root, err
+    elif fb == 0:
+        root = fb
+        err = 0
+        return root, err
+    
     d = 0.5*(a+b)
     while abs(d-a) > tol:
         fd = f(d)
