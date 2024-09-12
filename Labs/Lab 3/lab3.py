@@ -109,6 +109,11 @@ b = 0.1
 root, error = bisection(f4, a, b, tolerance)
 print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 
+# exercise 2c part 2: use f4 again but a = 0.5, b = 3pi/4
+a = 0.5
+b = (3*np.pi)/4
+root, error = bisection(f4, a, b, tolerance)
+print(f'Exercise {exercise}: The approximate root beteen x={a}, x={b} is {root}')
 
 ##################################################
 '''Fixed Point Eval'''
