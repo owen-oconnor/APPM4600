@@ -41,3 +41,10 @@ def fixed_point(f, x0, tol, Nmax):
     xstar = x1
     err = 1
     return xstar, err
+
+f1 = lambda x: (x**2)*(x-1)
+f2 = lambda x: (x-1)*(x-3)*(x-5)
+f3 = lambda x: ((x-1)**2)*(x-3)
+f4 = lambda x: np.sin(x)
+
+tolerance = 10**(-5)
