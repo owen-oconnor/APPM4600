@@ -3,6 +3,12 @@ import matplotlib.pyplot as plt
 import random
 import math
 
+#2b
+A = 0.5*np.array([[1, 1], 
+                  [1 + 10e-10, 1 - 10e-10]])
+condition_number = np.linalg.cond(A)
+print(f'The condition number of A is {condition_number}')
+
 #3c
 def f(x):
     y = math.e**x
