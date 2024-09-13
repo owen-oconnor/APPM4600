@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 #4a
 
@@ -9,10 +10,21 @@ y = np.cos(t)
 sum = 0
 for i in range(1, len(t)):
     sum += t[i]*y[i]
-    print(t[i], y[i], sum)
 
 print(f'the sum is {sum}')
 
 #4b
+R = 1.2
+dr = 0.1
+f = 15
+p = 0
+theta = np.linspace(0, 2*np.pi, 100)
+x = R*(1+dr*(np.sin(f*theta + p)))*np.cos(theta)
+y = R*(1+dr*(np.sin(f*theta + p)))*np.sin(theta)
+
+
+plt.plot(theta, x, '-o')
+plt.plot(theta, y, '-g')
+plt.show()
 
 
