@@ -23,8 +23,18 @@ x = R*(1+dr*(np.sin(f*theta + p)))*np.cos(theta)
 y = R*(1+dr*(np.sin(f*theta + p)))*np.sin(theta)
 
 
-plt.plot(theta, x, '-o')
-plt.plot(theta, y, '-g')
+plt.plot(x, y)
+plt.show()
+
+dr = 0.05
+for i in range(10):
+    R = i
+    f = 2 + i
+    p = random.uniform(0,2)
+    x = R*(1+dr*(np.sin(f*theta + p)))*np.cos(theta)
+    y = R*(1+dr*(np.sin(f*theta + p)))*np.sin(theta)
+    plt.plot(x, y)
+
 plt.show()
 
 
