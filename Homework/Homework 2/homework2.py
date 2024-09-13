@@ -5,8 +5,8 @@ import math
 
 #2b
 A = 0.5*np.array([[1, 1], 
-                  [1 + 10e-10, 1 - 10e-10]])
-condition_number = np.linalg.cond(A)
+                  [1 + 10e-10, 1 - 10e-10]]) # define matrix A
+condition_number = np.linalg.cond(A) # calculate condition number of A
 print(f'The condition number of A is {condition_number}')
 
 #3c
