@@ -25,8 +25,13 @@ def order_of_convergence(seq, p_true):
     
     return alpha
 
-def aitkens(seq):
-    return
+def aitkens(seq, tol, Nmax):
+    new_seq = []
+    for i in range(np.size(seq) - 2):
+        p_new = seq[i] - (seq[i+1] - seq[i])**2 / (seq[i+2] - 2*seq[i+1] + seq[i])
+        new_seq.append(p_new)
+
+    return np.array(new_seq)
 
 
 g = lambda x: math.sqrt(10 / (x+4))
@@ -34,3 +39,5 @@ sequence, err, count = fixed_point(g, 1.5, 1e-10, 200)
 print(sequence, count)
 ord = order_of_convergence(sequence, p_true=1.3652300134140976)
 print(f'the order of convergence is {ord}')
+new_approx = aitkens(sequence, 1, 1)
+print(new_approx)
