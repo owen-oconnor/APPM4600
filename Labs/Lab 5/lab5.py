@@ -57,7 +57,7 @@ def bisection_modified(f, df, ddf, a, b, tol, Nmax):
         return root, err
     
     m = 0.5*(a+b)
-    basin_check = (ddf(m) * f(m) / df**2) - 1 # check if midpoint is in basin of convergence for Newton's method
+    basin_check = (ddf(m) * f(m) / df(m)**2) - 1 # check if midpoint is in basin of convergence for Newton's method
     while basin_check > 1:
         fm = f(m)
 
@@ -69,7 +69,7 @@ def bisection_modified(f, df, ddf, a, b, tol, Nmax):
 
         m = 0.5*(a+b)
         fm = f(m)
-        basin_check = (ddf(m) * f(m) / df**2) - 1
+        basin_check = (ddf(m) * f(m) / df(m)**2) - 1
 
     p0 = m
 
@@ -109,7 +109,7 @@ def newton(f, df, p0, tol, Nmax):
   p = np.zeros(Nmax+1)
   p[0] = p0
   for it in range(Nmax):
-      p1 = p0-f(p0)/fp(p0)
+      p1 = p0 - f(p0)/df(p0)
       p[it+1] = p1
       if (abs(p1-p0) < tol):
           pstar = p1
@@ -124,6 +124,7 @@ def newton(f, df, p0, tol, Nmax):
 
 f6 = lambda x: np.exp(x**2 + 7*x - 30) - 1
 df6 = lambda x: (2*x + 7)*np.exp(x**2 + 7*x - 30)
+ddf6 = lambda x: 2*np.exp(x**2 + 7*x - 30) + ((2*x + 7)**2)*np.exp(x**2 + 7*x - 30)
 a = 2
 b = 4.5
 x0 = 4.5
@@ -132,7 +133,8 @@ tol = 1e-10
 root_bi, err = bisection(f6, a, b, tol)
 print(root_bi)
 
-root_newt = newton(f6, df6, x0, tol)[1]
+root_newt = newton(f6, df6, x0, tol, Nmax=200)[1]
 print(root_newt)
 
-root_hybrid = bisection_modified(f6, df6, a, b, tol, Nmax=100)
+root_hybrid = bisection_modified(f6, df6, ddf6, a, b, tol, Nmax=100)[1]
+print(root_hybrid)
