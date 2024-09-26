@@ -21,6 +21,7 @@ def bisection(f, a, b, tol):
         return root, err
     
     d = 0.5*(a+b)
+    n = 0
     while abs(d-a) > tol:
         fd = f(d)
 
@@ -32,11 +33,13 @@ def bisection(f, a, b, tol):
 
         d = 0.5*(a+b)
         fd = f(d)
+        n += 1
 
     root = d
     err = 0
+    iters = n
 
-    return root, err
+    return root, err, iters
 
 def bisection_modified(f, df, ddf, a, b, tol, Nmax):
     fa = f(a)
@@ -130,11 +133,15 @@ b = 4.5
 x0 = 4.5
 tol = 1e-10
 
-root_bi, err = bisection(f6, a, b, tol)
-print(root_bi)
+root_bi, err, iters = bisection(f6, a, b, tol)
+print(root_bi, iters)
 
-root_newt = newton(f6, df6, x0, tol, Nmax=200)[1]
-print(root_newt)
+newt = newton(f6, df6, x0, tol, Nmax=200)
+root_newt = newt[1]
+n_iters = newt[3]
+print(root_newt, n_iters)
 
-root_hybrid = bisection_modified(f6, df6, ddf6, a, b, tol, Nmax=100)[1]
-print(root_hybrid)
+hybrid = bisection_modified(f6, df6, ddf6, a, b, tol, Nmax=100)
+root_hybrid = hybrid[1]
+n_iters = hybrid[3]
+print(root_hybrid, n_iters)
