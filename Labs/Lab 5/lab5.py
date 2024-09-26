@@ -2,69 +2,59 @@ import numpy as np
 
 '''Define Methods'''
 
-def bisection(f, a, b, tol):
+def bisection_modified(f, df, ddf, a, b, tol, Nmax):
     fa = f(a)
     fb = f(b)
 
     if fa*fb > 0:
         err = 1
-        root = "no root found"
+        root = "no root in specified interval"
         return root, err
     
     if fa == 0:
-        root = fa
+        root = a
         err = 0
         return root, err
     elif fb == 0:
-        root = fb
+        root = b
         err = 0
         return root, err
     
-    d = 0.5*(a+b)
-    while abs(d-a) > tol:
-        fd = f(d)
+    m = 0.5*(a+b)
+    basin_check = (ddf(m) * f(m) / df**2) - 1 # check if midpoint is in basin of convergence for Newton's method
+    while basin_check > 1:
+        fm = f(m)
 
-        if f(d)*f(a) > 0:
-            a = d
-            fa = fd
+        if f(m)*f(a) > 0:
+            a = m
+            fa = fm
         else:
-            b = d
+            b = m
 
-        d = 0.5*(a+b)
-        fd = f(d)
+        m = 0.5*(a+b)
+        fm = f(m)
+        basin_check = (ddf(m) * f(m) / df**2) - 1
 
-    root = d
-    err = 0
+    p0 = m
 
-    return root, err
+    # now apply Newton's method using midpoint that we know is in basin of convergence
 
-def newton(f, fd, p0, tol, Nmax):
-  """
-  Newton iteration.
-  
-  Inputs:
-    f, fd - function and its derivative
-    x0   - initial guess for root
-    tol  - iteration stops when p_n,p_{n+1} are within tol
-    Nmax - max number of iterations
-  Returns:
-    p     - an array of the iterates
-    p_star - the last iterate
-    info  - success message
-          - 0 if we met tol
-          - 1 if we hit Nmax iterations (fail)
-     
-  """
-  p = np.zeros(Nmax+1)
-  p[0] = p0
-  for it in range(Nmax):
-      p1 = p0 - f(p0)/fd(p0)
+    p = np.zeros(Nmax+1)
+    p[0] = p0
+    for it in range(Nmax):
+      p1 = p0 - f(p0)/df(p0)
       p[it+1] = p1
       if (abs(p1-p0) < tol):
           p_star = p1
           info = 0
           return [p, p_star, info, it]
       p0 = p1
-  p_star = p1
-  info = 1
-  return [p, p_star, info, it]
+    p_star = p1
+    info = 1
+    return [p, p_star, info, it]
+
+'''Question 6'''
+
+f6 = lambda x: np.exp(x**2 + 7*x - 30)
+
+
