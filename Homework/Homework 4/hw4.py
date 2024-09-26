@@ -55,7 +55,7 @@ def fixed_point(f, x0, tol, Nmax):
     err = 1
     return xstar, err
 
-def newton(f, fd , x0, tol, Nmax):
+def newton(f, fd, p0, tol, Nmax):
   """
   Newton iteration.
   
@@ -66,25 +66,25 @@ def newton(f, fd , x0, tol, Nmax):
     Nmax - max number of iterations
   Returns:
     p     - an array of the iterates
-    pstar - the last iterate
+    p_star - the last iterate
     info  - success message
           - 0 if we met tol
           - 1 if we hit Nmax iterations (fail)
      
   """
   p = np.zeros(Nmax+1)
-  p[0] = x0
+  p[0] = p0
   for it in range(Nmax):
-      p1 = p0-f(p0)/fd(p0)
+      p1 = p0 - f(p0)/fd(p0)
       p[it+1] = p1
       if (abs(p1-p0) < tol):
-          pstar = p1
+          p_star = p1
           info = 0
-          return [p,pstar,info,it]
+          return [p, p_star, info, it]
       p0 = p1
-  pstar = p1
+  p_star = p1
   info = 1
-  return [p,pstar,info,it]
+  return [p, p_star, info, it]
 
 
 '''Question 1'''
@@ -96,19 +96,31 @@ tol = 1e-13
 alpha = 0.138e-6
 
 def temp(x):
-    T = 35*erf(x / (2*np.sqrt(alpha*t_seconds))) - 15
+    T = erf(x / (2*np.sqrt(alpha*t_seconds))) - 15/35
     return T
+
+def temp_prime(x):
+    T_prime = np.exp(-(x / (2*np.sqrt(alpha*t_seconds)))**2) / (np.sqrt(alpha*t_seconds*np.pi))
+    return T_prime
 
 x = np.linspace(0, x_hat, 1000)
 temps = temp(x)
 
 plt.plot(x, temps)
+plt.axhline(0, color='black')
+plt.xlabel("Depth (m)")
+plt.ylabel("Temp (C)")
+plt.title("Temperature vs Depth after 60 Days")
 plt.show()
 
 root_bi, err = bisection(temp, 0, x_hat, tol=tol)
 print(f'The approximate depth (root) using bisection is {root_bi} meters')
 
-root_newt = newton(temp, temp, x0=0.01, tol=tol, Nmax=200)
+root_newt = newton(temp, temp_prime, p0=0.01, tol=tol, Nmax=200)[1]
+print(f'The approximate depth (root) using Newton is {root_newt} meters')
+
+root_newt2 = newton(temp, temp_prime, p0=5, tol=tol, Nmax=200)[1] # try initial guess of 5 meters
+print(f'The approx depth (root) using Newton with initial guess of 5 meters is {root_newt2}')
 
 
 '''Question 4'''
