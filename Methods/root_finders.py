@@ -108,6 +108,38 @@ def newton(f, df, p0, tol, Nmax):
   return [p,pstar,info,it]
 
 
+def modified_newt(f, df, m, p0, tol, Nmax):
+    """
+    Applies a modified newton method for roots with high multiplicity
+
+    Args:
+        f:
+        df:
+        m:
+        p0:
+        tol:
+        Nmax:
+
+    Returns:
+        p:
+        pstar:
+        info:
+        it:
+    """
+    p = [p0]
+    for it in range(Nmax):
+        p1 = p0 - (m*f(p0))/df(p0)
+        p.append(p1)
+        if (abs(p1-p0) < tol):
+            p_star = p1
+            info = 0
+            return [p, p_star, info, it]
+    p0 = p1
+    p_star = p1
+    info = 1
+    return [p, p_star, info, it]
+
+
 def hybrid(f, df, ddf, a, b, tol, Nmax):
     """
     Hybrid iteration method: 

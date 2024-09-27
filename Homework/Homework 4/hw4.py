@@ -1,10 +1,25 @@
 from scipy.special import erf
 import numpy as np
 import matplotlib.pyplot as plt
-from ...methods.root_finders import bisection
 
-'''Define Methods'''
+'''
+Define Methods
+'''
+
 def bisection(f, a, b, tol):
+    """
+    Approximates the root of a function using the bisection method
+
+    Args:
+        f: function that we want to find the root for
+        a: left end point of interval
+        b: right end point of interval
+        tol: tolerance at which we deem the approximate root is precise enough to the real root
+
+    Returns:
+        root: the approximate root computed with the bisection method
+        err: a success or failure message (0 for success, 1 for failure)
+    """
     fa = f(a)
     fb = f(b)
 
@@ -41,6 +56,15 @@ def bisection(f, a, b, tol):
     return root, err
 
 def fixed_point(f, x0, tol, Nmax):
+    """
+    Applies the fixed point iteration method to a given function
+
+    Args:
+        f: the function fixed point is applied to
+        x0: an initial starting point for fixed point iteration
+        tol: the tolerance to which we accept the root
+        Nmax: an upper bound on the number of iterations
+    """
     count = 0
 
     while count < Nmax:
@@ -56,37 +80,57 @@ def fixed_point(f, x0, tol, Nmax):
     err = 1
     return xstar, err
 
-def newton(f, fd, p0, tol, Nmax):
+def newton(f, df, p0, tol, Nmax):
   """
   Newton iteration.
   
-  Inputs:
-    f, fd - function and its derivative
-    x0   - initial guess for root
-    tol  - iteration stops when p_n,p_{n+1} are within tol
-    Nmax - max number of iterations
+  Args:
+    f: the function we want to find the root of
+    df: the derivative of the function
+    p0: initial guess for root
+    tol: iteration stops when p_n,p_{n+1} are within tol
+    Nmax: max number of iterations
+
   Returns:
-    p     - an array of the iterates
-    p_star - the last iterate
-    info  - success message
+    p: an array of the approximations at each iteration
+    pstar: the value of the last iteration
+    info: success message
           - 0 if we met tol
           - 1 if we hit Nmax iterations (fail)
      
   """
   p = [p0]
   for it in range(Nmax):
-      p1 = p0 - f(p0)/fd(p0)
-      p.append(p1)
+      p1 = p0 - f(p0)/df(p0)
+      p.append(p0)
       if (abs(p1-p0) < tol):
-          p_star = p1
+          pstar = p1
           info = 0
-          return [p, p_star, info, it]
+          return [p,pstar,info,it]
       p0 = p1
-  p_star = p1
+  pstar = p1
   info = 1
-  return [p, p_star, info, it]
+  return [p,pstar,info,it]
+
 
 def modified_newt(f, df, m, p0, tol, Nmax):
+    """
+    Applies a modified newton method for roots with high multiplicity
+
+    Args:
+        f:
+        df:
+        m:
+        p0:
+        tol:
+        Nmax:
+
+    Returns:
+        p:
+        pstar:
+        info:
+        it:
+    """
     p = [p0]
     for it in range(Nmax):
         p1 = p0 - (m*f(p0))/df(p0)
@@ -100,7 +144,18 @@ def modified_newt(f, df, m, p0, tol, Nmax):
     info = 1
     return [p, p_star, info, it]
 
+
 def secant(f, x0, x1, tol, Nmax):
+    """
+    Applies secant method to approximate root of a given function
+
+    Args:
+        f: the function we want to find the root of
+        x0: the initial starting point for the method
+        tol: the tolerance of the root
+        Nmax: an upper bound on the number of iterations
+    """
+
     p = [x0, x1]
     for it in range(Nmax):
         x_new = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
