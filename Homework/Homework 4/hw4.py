@@ -86,11 +86,10 @@ def newton(f, fd, p0, tol, Nmax):
   return [p, p_star, info, it]
 
 def modified_newt(f, df, m, p0, tol, Nmax):
-    p = np.zeros(Nmax+1)
-    p[0] = p0
+    p = [p0]
     for it in range(Nmax):
         p1 = p0 - (m*f(p0))/df(p0)
-        p[it+1] = p1
+        p.append(p1)
         if (abs(p1-p0) < tol):
             p_star = p1
             info = 0
@@ -118,7 +117,6 @@ def calculate_slope(log_prev_errors, log_errors):
 # Modify plot_convergence to calculate and display the slope
 def order_of_convergence(x_values, root, method_name):
     errors = [abs(x - root) for x in x_values if abs(x-root) != 0]
-    print(errors)
     log_errors = np.log(errors[1:])
     log_prev_errors = np.log(errors[:-1])
     
@@ -177,13 +175,19 @@ f4 = lambda x: np.exp(3*x) - 27*x**6 + 27*x**4*np.exp(x) - 9*x**2*np.exp(2*x)
 df4 = lambda x: 3*np.exp(3*x) - (6*27*(x**5)) + 4*27*(x**3)*np.exp(x) + 27*x**4*np.exp(x) - 2*9*x*np.exp(2*x) - 2*9*x**2*np.exp(2*x) 
 m = 1 # multiplicity for modified method
 
-newt = newton(f4, df4, p0=4, tol=1e-13, Nmax=500)
+newt = newton(f4, df4, p0=4, tol=1e-8, Nmax=500)
 values_newt = newt[0]
 root_newt = newt[1]
 
-mod_newt = modified_newt(f4, df4, m, p0=4, tol=1e-13, Nmax=500)
+'''mod_newt = modified_newt(f4, df4, m, p0=4, tol=1e-8, Nmax=500)
 values_mod_newt = mod_newt[0]
 root_mod_newt = mod_newt[1]
+print(values_mod_newt, root_mod_newt)'''
+
+order_newt = order_of_convergence(values_newt, root_newt, 'Newton')
+#order_mod_newt = order_of_convergence(values_mod_newt, root_mod_newt, 'Modified Newt')
+print(f'The order of convergence with the newton method (slope of log-log graph) is {order_newt}')
+#print(f'The order of convergence with the secant method (slope of log-log graph) is {order_mod_newt}')
 
 '''Question 5'''
 f5 = lambda x: x**6 - x - 1
@@ -202,13 +206,16 @@ values_newt = newt[0]
 root_newt = newt[1]
 iters = newt[3]
 errs_newt = errors(values_newt, root_newt)
-print(iters)
+print(errs_newt)
 
 
 sec = secant(f5, x0, x1, tol, Nmax=500)
 values_sec = sec[0]
 root_sec = sec[1]
 errs_sec = errors(values_sec, root_sec)
+print(errs_sec)
 
 order_newt = order_of_convergence(values_newt, root_newt, 'Newton')
-#order_sec = order_of_convergence(values_sec, root_sec, 'Secant')
+order_sec = order_of_convergence(values_sec, root_sec, 'Secant')
+print(f'The order of convergence with the newton method (slope of log-log graph) is {order_newt}')
+print(f'The order of convergence with the secant method (slope of log-log graph) is {order_sec}')
