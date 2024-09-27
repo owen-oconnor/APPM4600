@@ -174,10 +174,16 @@ print(f'The approx depth (root) using Newton with initial guess of 5 meters is {
 
 '''Question 4'''
 f4 = lambda x: np.exp(3*x) - 27*x**6 + 27*x**4*np.exp(x) - 9*x**2*np.exp(2*x)
-df4 = lambda x: x
-m = 1
+df4 = lambda x: 3*np.exp(3*x) - (6*27*(x**5)) + 4*27*(x**3)(*np.exp(x)) + 27*x**4*np.exp(x) - 2*9*x*np.exp(2*x) - 2*9*x**2*np.exp(2*x) 
+m = 1 # multiplicity for modified method
 
-newt = newton(f4, )
+newt = newton(f4, df4, p0=4, tol=1e-13, Nmax=500)
+values_newt = newton[0]
+root_newt = newton[1]
+
+mod_newt = modified_newt(f4, df4, m, p0=4, tol=1e-13, Nmax=500)
+values_mod_newt = mod_newt[0]
+root_mod_newt = mod_newt[1]
 
 '''Question 5'''
 f5 = lambda x: x**6 - x - 1
