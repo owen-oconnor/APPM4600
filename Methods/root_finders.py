@@ -1,6 +1,19 @@
 import numpy as np
 
 def bisection(f, a, b, tol):
+    """
+    Approximates the root of a function using the bisection method
+
+    Args:
+        f: function that we want to find the root for
+        a: left end point of interval
+        b: right end point of interval
+        tol: tolerance at which we deem the approximate root is precise enough to the real root
+
+    Returns:
+        root: the approximate root computed with the bisection method
+        err: a success or failure message (0 for success, 1 for failure)
+    """
     fa = f(a)
     fb = f(b)
 
@@ -37,6 +50,15 @@ def bisection(f, a, b, tol):
     return root, err
 
 def fixed_point(f, x0, tol, Nmax):
+    """
+    Applies the fixed point iteration method to a given function
+
+    Args:
+        f: the function fixed point is applied to
+        x0: an initial starting point for fixed point iteration
+        tol: the tolerance to which we accept the root
+        Nmax: an upper bound on the number of iterations
+    """
     count = 0
 
     while count < Nmax:
@@ -56,15 +78,17 @@ def newton(f, df, p0, tol, Nmax):
   """
   Newton iteration.
   
-  Inputs:
-    f,fp - function and derivative
-    p0   - initial guess for root
-    tol  - iteration stops when p_n,p_{n+1} are within tol
-    Nmax - max number of iterations
+  Args:
+    f: the function we want to find the root of
+    df: the derivative of the function
+    p0: initial guess for root
+    tol: iteration stops when p_n,p_{n+1} are within tol
+    Nmax: max number of iterations
+
   Returns:
-    p     - an array of the iterates
-    pstar - the last iterate
-    info  - success message
+    p: an array of the approximations at each iteration
+    pstar: the value of the last iteration
+    info: success message
           - 0 if we met tol
           - 1 if we hit Nmax iterations (fail)
      
@@ -86,22 +110,22 @@ def newton(f, df, p0, tol, Nmax):
 
 def hybrid(f, df, ddf, a, b, tol, Nmax):
     """
-    Hybrid Iteration ethod: 
+    Hybrid iteration method: 
     
-    Inputs:
-    f: function you want to find the root of
-    df: derivative of f
-    ddf: second derivative of f
-    a: left endpoint for bisection
-    b: right endpoint for bisection
-    tol: tolerance for newton's method
-    Nmax: max number of iterations
+    Args:
+        f: function you want to find the root of
+        df: derivative of f
+        ddf: second derivative of f
+        a: left endpoint for bisection
+        b: right endpoint for bisection
+        tol: tolerance for newton's method
+        Nmax: max number of iterations
 
-    Outputs:
-    p: array of all root approximations at each iteration of newton
-    pstar: approximate root to tolerance provided
-    it: number of iterations
-    info: success/failure information (0 for success, 1 for fail)
+    Returns:
+        p: array of all root approximations at each iteration of newton
+        pstar: approximate root to tolerance provided
+        it: number of iterations
+        info: success/failure information (0 for success, 1 for fail)
     
     """
     fa = f(a)
@@ -140,16 +164,24 @@ def hybrid(f, df, ddf, a, b, tol, Nmax):
 
     # now apply Newton's method using midpoint that we know is in basin of convergence
 
-    p = np.zeros(Nmax+1)
-    p[0] = p0
+    return newton(f, df, p0, tol, Nmax)
+
+def secant(f, x0, tol, Nmax):
+    """
+    Applies secant method to approximate root of a given function
+
+    Args:
+        f: the function we want to find the root of
+        x0: the initial starting point for the method
+        tol: the tolerance of the root
+        Nmax: an upper bound on the number of iterations
+    """
+
+    p = [x0, x1]
     for it in range(Nmax):
-      p1 = p0 - f(p0)/df(p0)
-      p[it+1] = p1
-      if (abs(p1-p0) < tol):
-          p_star = p1
-          info = 0
-          return [p, p_star, info, it]
-      p0 = p1
-    p_star = p1
-    info = 1
-    return [p, p_star, info, it]
+        x_new = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
+        p.append(x_new)
+        if abs(x_new - x1) < tol:
+            return [p, x_new, it]
+        x0, x1 = x1, x_new
+    return [p, x_new, it]

@@ -1,6 +1,7 @@
 from scipy.special import erf
 import numpy as np
 import matplotlib.pyplot as plt
+from ...methods.root_finders import bisection
 
 '''Define Methods'''
 def bisection(f, a, b, tol):
@@ -110,11 +111,9 @@ def secant(f, x0, x1, tol, Nmax):
     return [p, x_new, it]
 
 def calculate_slope(log_prev_errors, log_errors):
-    # Fit a line (y = mx + c) to the log-log data
     slope, intercept = np.polyfit(log_prev_errors, log_errors, 1)
     return slope
 
-# Modify plot_convergence to calculate and display the slope
 def order_of_convergence(x_values, root, method_name):
     errors = [abs(x - root) for x in x_values if abs(x-root) != 0]
     log_errors = np.log(errors[1:])
