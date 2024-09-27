@@ -86,6 +86,55 @@ def newton(f, fd, p0, tol, Nmax):
   info = 1
   return [p, p_star, info, it]
 
+def modified_newt(f, df, m, p0, tol, Nmax):
+    p = np.zeros(Nmax+1)
+    p[0] = p0
+    for it in range(Nmax):
+        p1 = p0 - (m*f(p0))/df(p0)
+        p[it+1] = p1
+        if (abs(p1-p0) < tol):
+            p_star = p1
+            info = 0
+            return [p, p_star, info, it]
+    p0 = p1
+    p_star = p1
+    info = 1
+    return [p, p_star, info, it]
+
+def secant(f, x0, x1, tol, Nmax):
+    p = [x0, x1]
+    for it in range(Nmax):
+        x_new = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
+        p.append(x_new)
+        if abs(x_new - x1) < tol:
+            return [p, x_new, it]
+        x0, x1 = x1, x_new
+    return [p, x_new, it]
+
+def calculate_slope(log_prev_errors, log_errors):
+    # Fit a line (y = mx + c) to the log-log data
+    slope, intercept = np.polyfit(log_prev_errors, log_errors, 1)
+    return slope
+
+# Modify plot_convergence to calculate and display the slope
+def order_of_convergence(x_values, alpha, method_name):
+    errors = [abs(x - alpha) for x in x_values]
+    log_errors = np.log(errors[1:])
+    log_prev_errors = np.log(errors[:-1])
+    
+    # Calculate the slope
+    slope = calculate_slope(log_prev_errors, log_errors)
+    
+    # Plot the log-log graph
+    plt.figure()
+    plt.plot(log_prev_errors, log_errors, 'o', label=f'{method_name}')
+    plt.xlabel(r'$\log(|x_k - \alpha|)$')
+    plt.ylabel(r'$\log(|x_{k+1} - \alpha|)$')
+    plt.title(f'Order of Convergence - {method_name}')
+    plt.show()
+
+    return slope
+
 
 '''Question 1'''
 
@@ -124,10 +173,38 @@ print(f'The approx depth (root) using Newton with initial guess of 5 meters is {
 
 
 '''Question 4'''
-def f4(x):
-    return np.exp(3*x) - 27*x**6 + 27*x**4*np.exp(x) - 9*x**2*np.exp(2*x)
+f4 = lambda x: np.exp(3*x) - 27*x**6 + 27*x**4*np.exp(x) - 9*x**2*np.exp(2*x)
+df4 = lambda x: x
+m = 1
 
+newt = newton(f4, )
 
 '''Question 5'''
-def f5(x):
-    return x**6 - x - 1
+f5 = lambda x: x**6 - x - 1
+df5 = lambda x: 6*(x**5) - 1
+
+def errors(values, root):
+    errs = [abs(v - root) for v in values]
+    return errs
+
+x0 = 2
+x1 = 1
+tol = 1e-13
+
+newt = newton(f5, df5, x0, tol, Nmax=500)
+values_newt = newt[0]
+root_newt = newt[1]
+errs_newt = errors(values_newt, root_newt)
+print(errs_newt)
+
+
+sec = secant(f5, x0, x1, tol, Nmax=500)
+values_sec = sec[0]
+root_sec = sec[1]
+errs_sec = errors(values_sec, root_sec)
+print(errs_sec)
+
+order_newt = order_of_convergence(values_newt, root_newt, 'Newton')
+order_sec = order_of_convergence(values_sec, root_sec, 'Secant')
+
+print(order_newt, order_sec)
