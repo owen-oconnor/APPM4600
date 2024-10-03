@@ -3,6 +3,26 @@ import math
 from numpy.linalg import norm
 from numpy.linalg import inv
 
+'''Before Lab'''
+
+def forward_diff(f, s, h):
+    f_prime = (f(s+h) - f(s)) / h
+    return f_prime
+
+def centered_diff(f, s, h):
+    f_prime = (f(s + h) - f(s)) / 2*h
+    return f_prime
+
+f = lambda x: np.cos(x)
+s = np.pi / 2
+h_values = 0.01 * 2.0 ** (-np.arange(0, 10))
+
+forward_diffs = [forward_diff(f, s, h) for h in h_values]
+centered_diffs = [centered_diff(f, s, h) for h in h_values]
+print(forward_diffs)
+print(centered_diffs)
+
+
 def evalF(x): 
 
     F = np.zeros(3)
