@@ -84,7 +84,7 @@ def slacker_newton(f1, j, x0, tol, Nmax):
        f = f1(x0)
        x1 = x0 - Jinv.dot(f)
        
-       if norm(-Jinv.dot(f)) > 1e-5: # update Jacobian if step is too big
+       if norm(-Jinv.dot(f)) > 1e-2: # update Jacobian if step is too big
            J = j(x1)
            Jinv = inv(J)
            update_count += 1 # count how many times jacobian is updated  
