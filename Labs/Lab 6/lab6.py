@@ -133,3 +133,10 @@ updates = slacker[3]
 print(f'The approx root with slacker newton is {root} in {iters} iterations with {updates} updates to the Jacobian')
 
 # 3.3
+
+def approx_jacob(f, s, h):
+    j = np.zeros((2, 2))
+    j[0, 0] = 1
+    j[0, 1] = 1
+    j[1, 0] = 1
+    j[1 ,1] = 1
