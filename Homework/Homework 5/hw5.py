@@ -11,56 +11,71 @@ def g1(x, y):
     return 3*x*y**2 - x*3 - 1
 
 def jacob(x, y):
-    jacobian = np.array([6*x, -2*y],
-                            [3*y**2 - 3*x**2, 6*x*y])
+    jacobian = np.array([[6*x, -2*y],
+                            [3*y**2 - 3*x**2, 6*x*y]])
     return jacobian
 
-def iteration(f, g, v0, tol, Nmax):
+def iterate1(f, g, v0, tol, Nmax):
     x0 = v0[0]
     y0 = v0[1]
     f0 = f(x0, y0)
     g0 = g(x0, y0)
-    matrix = np.array([[1/6, 1/18],
-                        [0, 1/6]])
-    funcs = np.array([f0,
-                        g0])
 
     for i in range(Nmax):
-        v1 = v0 - matrix*funcs
-        f1 = f(v1[0])
-        g1 = f(v1[1])
-        funcs = np.array([f1, 
-                          g1])
+        x1 = x0 - (1/6 * f0) - (1/18 * g0)
+        y1 = y0 - 1/6 * g0
 
-    return v1, i
+        v0 = np.array([x0, y0])
+        v1 = np.array([x1, y1])
 
-def newton(x0, tol, Nmax):
+        if norm(v1-v0) < tol:
+            return v1
+        
+        x0 = x1
+        y0 = y1
+
+    v = np.array([x1, y1])
+
+    return [v, i]
+
+def newton(v0, tol, Nmax):
 
     ''' inputs: x0 = initial guess, tol = tolerance, Nmax = max its'''
     ''' Outputs: xstar= approx root, ier = error message, its = num its'''
+    x0 = v0[0]
+    y0 = v0[1]
 
     for its in range(Nmax):
-       J = jacob(x0)
+       J = jacob(x0, y0)
        Jinv = inv(J)
-       F = f1(x0)
+       F = np.array([f1(x0, y0), g1(x0, y0)])
        
-       x1 = x0 - Jinv.dot(F)
+       v1 = v0 - Jinv.dot(F)
        
-       if (norm(x1-x0) < tol):
-           xstar = x1
+       if (norm(v1-v0) < tol):
+           v = v1
            ier =0
-           return[xstar, ier, its]
+           return[v, ier, its]
            
-       x0 = x1
+       v0 = v1
     
-    xstar = x1
+    v = v1
     ier = 1
-    return[xstar, ier, its]
+    return[v, ier, its]
 
 v0 = np.array([1, 
                 1]) 
+tol = 1e-10
+Nmax = 1000
+
+'''1a'''
+scheme = iterate1(f1, g1, v0, tol, Nmax)
+print(f'The iteration scheme converges on {scheme[0]}')
 
 
+'''1b'''
+newtons = newton(v0, tol, Nmax)
+print(f'The newton method converges on {newtons[0]}')
 
 '''Question 3b'''
 
