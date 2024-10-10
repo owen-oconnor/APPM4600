@@ -75,28 +75,45 @@ f = lambda x: 1 / (1 + (10*x)**2)
 a = -1
 b = 1
 
+Neval = 1000 
+xeval = np.linspace(a, b, Neval+1)
+yexact = f(xeval)
+
+
 for N in range(2, 11):
     xint = np.linspace(a, b, N+1)
     yint = f(xint)
 
+    '''Monomial method'''
     V = Vandermonde(xint, N)
-    #print(xint, V, N)
     Vinv = inv(V)
     coeffs = Vinv @ yint # apply inverse of Vandermonde matrix to function values to determine coefficients
+    yeval_mono = eval_monomial(xeval, coeffs, N, Neval) # evaluate polynomial with calculated coefficients
 
-    Neval = 1000 
-    xeval = np.linspace(a, b, Neval+1)
-    yeval = eval_monomial(xeval, coeffs, N, Neval) # evaluate polynomial with calculated coefficients
+    '''Lagrange method'''
+    yeval_lagrange = eval_lagrange(xeval, xint, yint, N)
 
-    yexact = f(xeval)
+    '''Divided Difference method'''
 
-    #error = np.linalg.norm(yexact - yeval)
-    plt.plot(xeval, yexact, label='Exact Function', color='blue')
-    plt.plot(xeval, yeval, label='Monomial Approx', linestyle='--', color='green')
-    #plt.plot(xeval, error, label='Absolute Error', color='red')
-    plt.legend()
-    plt.xlabel('x')
-    plt.ylabel('y')
 
+    '''Plot functions'''
+    plt.plot(xeval, yeval_mono, label=f'Monomial Approx for N = {N}', linestyle='--', color=np.random.rand(3,))
+    plt.plot(xeval, yeval_lagrange, label=f'Monomial Approx for N = {N}', linestyle=':', color=np.random.rand(3,))
+
+    '''Calculate and plot errors'''
+    error_mono = np.linalg.norm(yexact - yeval_mono)
+    error_lagrange = np.linalg.norm(yexact - yeval_lagrange)
+    error_dd = 0
+
+    plt.plot(xeval, error_mono, label=f'Monomial Error for N = {N}', color='green')
+    plt.plot(xeval, error_lagrange, label=f'Lagrange Error for N = {N}', color='purple')
+
+
+
+plt.plot(xeval, yexact, label='Exact Function', color='blue')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.title('Interpolation Methods and Errors')
 plt.show()
 
