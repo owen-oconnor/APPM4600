@@ -79,10 +79,61 @@ Neval = 1000
 xeval = np.linspace(a, b, Neval+1)
 yexact = f(xeval)
 
-errors_mono = []
-errors_lagrange = []
-errors_dd = []
-for N in range(2, 11):
+for N in range(2, 21):
+    if N <= 11:
+        xint = np.linspace(a, b, N+1)
+        yint = f(xint)
+
+        '''Monomial method'''
+        V = Vandermonde(xint, N)
+        Vinv = inv(V)
+        coeffs = Vinv @ yint # apply inverse of Vandermonde matrix to function values to determine coefficients
+        yeval_mono = eval_monomial(xeval, coeffs, N, Neval) # evaluate polynomial with calculated coefficients
+
+        '''Lagrange and DD methods'''
+
+        yeval_lagrange = np.zeros(Neval+1)
+        yeval_dd = np.zeros(Neval+1)
+  
+        '''Initialize and populate the first columns of the 
+        divided difference matrix. We will pass the x vector'''
+    
+        y = np.zeros( (N+1, N+1) )
+        for j in range(N+1):
+            y[j][0]  = yint[j]
+
+        y = dividedDiffTable(xint, y, N+1)
+        ''' evaluate lagrange poly '''
+        for kk in range(Neval+1):
+            yeval_lagrange[kk] = eval_lagrange(xeval[kk],xint,yint,N)
+            yeval_dd[kk] = evalDDpoly(xeval[kk],xint,y,N)
+
+
+        '''Plot functions'''
+        plt.plot(xeval, yeval_mono, label=f'Monomial Approx for N = {N}', linestyle='--', color=np.random.rand(3,))
+        plt.plot(xeval, yeval_lagrange, label=f'Lagrange Approx for N = {N}', linestyle=':', color=np.random.rand(3,))
+        plt.plot(xeval, yeval_dd, label=f'DD Approx for N = {N}', linestyle='-.', color=np.random.rand(3,))
+
+        '''Calculate and plot errors'''
+        error_mono = yexact - yeval_mono
+        error_lagrange = yexact - yeval_lagrange
+        error_dd = yexact - yeval_dd
+
+        plt.plot(xeval, error_mono, label=f'Monomial Error for N = {N}', color='green') # plot errors
+        plt.plot(xeval, error_lagrange, label=f'Lagrange Error for N = {N}', color='purple')
+        plt.plot(xeval, error_dd, label=f'DD Error for N = {N}', color='red')
+
+plt.plot(xeval, yexact, label='Exact Function', color='blue') # Plot exact function
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.title('Interpolation Methods for N = [2, 10]')
+plt.show()
+
+'''Extending beyond N = 10'''
+
+for N in range(11, 21):
     xint = np.linspace(a, b, N+1)
     yint = f(xint)
 
@@ -98,17 +149,17 @@ for N in range(2, 11):
     yeval_dd = np.zeros(Neval+1)
   
     '''Initialize and populate the first columns of the 
-     divided difference matrix. We will pass the x vector'''
+        divided difference matrix. We will pass the x vector'''
     
     y = np.zeros( (N+1, N+1) )
     for j in range(N+1):
-       y[j][0]  = yint[j]
+        y[j][0]  = yint[j]
 
     y = dividedDiffTable(xint, y, N+1)
     ''' evaluate lagrange poly '''
     for kk in range(Neval+1):
-       yeval_lagrange[kk] = eval_lagrange(xeval[kk],xint,yint,N)
-       yeval_dd[kk] = evalDDpoly(xeval[kk],xint,y,N)
+        yeval_lagrange[kk] = eval_lagrange(xeval[kk],xint,yint,N)
+        yeval_dd[kk] = evalDDpoly(xeval[kk],xint,y,N)
 
 
     '''Plot functions'''
@@ -116,28 +167,9 @@ for N in range(2, 11):
     plt.plot(xeval, yeval_lagrange, label=f'Lagrange Approx for N = {N}', linestyle=':', color=np.random.rand(3,))
     plt.plot(xeval, yeval_dd, label=f'DD Approx for N = {N}', linestyle='-.', color=np.random.rand(3,))
 
-    '''Calculate and plot errors'''
-    '''error_mono = np.linalg.norm(yexact - yeval_mono)
-    error_lagrange = np.linalg.norm(yexact - yeval_lagrange)
-    error_dd = np.linalg.norm(yexact - yeval_dd)
-
-    errors_mono.append(error_mono),
-    errors_lagrange.append(error_lagrange)
-    errors_dd.append(error_dd)'''
-
-
-
 plt.plot(xeval, yexact, label='Exact Function', color='blue') # Plot exact function
-
-'''plt.plot(xeval, errors_mono, label=f'Monomial Error for N = {N}', color='green') # plot errors
-plt.plot(xeval, errors_lagrange, label=f'Lagrange Error for N = {N}', color='purple')
-plt.plot(xeval, errors_dd, label=f'DD Error for N = {N}', color='red')'''
 plt.xlabel('x')
 plt.ylabel('y')
-plt.legend()
-plt.title('Interpolation Methods')
+plt.title('Interpolation Methods for N = [11, 20]')
 plt.show()
-
-
-'''Extending beyond N = 10'''
 
