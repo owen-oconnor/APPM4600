@@ -58,36 +58,29 @@ def broyden(f, j, x0 , tol, Nmax):
     ier = 1
     return[alpha,ier,its]
 
-def secant(f, v0, v1, tol, Nmax):
-    """
-    Applies secant method to approximate root of a given  vectorfunction
+def lazy_newton(f, j, v0, tol, Nmax):
 
-    Args:
-        f: the function we want to find the root of
-        v0: the initial starting point for the method
-        v1: the next point for the method
-        tol: the tolerance of the root
-        Nmax: an upper bound on the number of iterations
-    """
+    ''' Lazy Newton = use only the inverse of the Jacobian for initial guess'''
+    ''' inputs: x0 = initial guess, tol = tolerance, Nmax = max its'''
+    ''' Outputs: xstar= approx root, ier = error message, its = num its'''
 
-    for it in range(Nmax):
+    J = j(v0)
+    Jinv = inv(J)
+    for its in range(Nmax):
 
-        F0 = f(v0)
-        F1 = f(v1)
-
-        delta_v = v1 - v0
-        delta_F = F1 - F0
-
-        if norm(delta_v) == 0: # let's not divide by 0
-            return[v1, it]
-
-        v_new = v1 - np.dot(delta_v, delta_v) / np.dot(delta_v, delta_F) * F1
-        if norm(v_new - v1) < tol:
-            return [v_new, it]
-        
-        v0, v1 = v1, v_new
-
-    return [v_new, it]
+       F = f(v0)
+       v1 = v0 - Jinv.dot(F)
+       
+       if (norm(v1-v0) < tol):
+           vstar = v1
+           ier =0
+           return[vstar, ier,its]
+           
+       v0 = v1
+    
+    vstar = v1
+    ier = 1
+    return[vstar,ier,its]  
 
 def newton(f, j, x0, tol, Nmax):
 
@@ -159,10 +152,10 @@ v3 = np.array([0,
 tol = 1e-10
 
 sol_broyden = broyden(f1, J1, v1, tol, Nmax=500)
-sol_secant = secant(f1, J1, v1, v2, tol, Nmax=500)
+sol_lazy = lazy_newton(f1, J1, v1, tol, Nmax=500)
 
-print(f'The approximate solution using Broyden method is {sol_broyden[0]} in {sol_broyden[1]} iterations')
-print(f'The approximate solution using the Secant method is {sol_secant[0]} in {sol_secant[1]} iterations')
+print(f'The approximate solution using Broyden method is {sol_broyden[0]} in {sol_broyden[2]} iterations')
+print(f'The approximate solution using the Lazy Newton method is {sol_lazy[0]} in {sol_lazy[2]} iterations')
 
 
 '''Question 2'''
@@ -208,4 +201,4 @@ print(f'The approximate solution using the Steepest Descent method is {sol_steep
 v2_new = sol_steep[0]
 sol_newt = newton(f2, J2, v2_new, tol, Nmax=500)
 print(f2(sol_newt[0]))
-print(f'The approximate solution using Newtons method is {sol_newt[0]} in {sol_newt[1] + 1} iterations')
+print(f'The approximate solution using Newtons method is {sol_newt[0]} in {sol_newt[2] + 1} iterations')
