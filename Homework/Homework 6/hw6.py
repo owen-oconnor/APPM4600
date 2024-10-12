@@ -24,7 +24,10 @@ def broyden(f, j, x0 , tol, Nmax):
     
     '''initialize with 1 newton step'''
     
-    A0 = j(x0)
+    try:
+        A0 = j(x0)
+    except:
+        return
 
     v = f(x0)
     A = inv(A0)
@@ -151,10 +154,10 @@ v3 = np.array([0,
 
 tol = 1e-10
 
-sol_broyden = broyden(f1, J1, v1, tol, Nmax=500)
-sol_lazy = lazy_newton(f1, J1, v1, tol, Nmax=500)
+#sol_broyden = broyden(f1, J1, v3, tol, Nmax=500)
+sol_lazy = lazy_newton(f1, J1, v3, tol, Nmax=500)
 
-print(f'The approximate solution using Broyden method is {sol_broyden[0]} in {sol_broyden[2]} iterations')
+#print(f'The approximate solution using Broyden method is {sol_broyden[0]} in {sol_broyden[2]} iterations')
 print(f'The approximate solution using the Lazy Newton method is {sol_lazy[0]} in {sol_lazy[2]} iterations')
 
 
