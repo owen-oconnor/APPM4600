@@ -1,13 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import math
 from numpy.linalg import inv 
 
 
 def driver():
     
-    f = lambda x: math.exp(x)
-    a = 0
+    f = lambda x: 1 / (1 + (10*x)**2)
+    a = -1
     b = 1
     
     ''' create points you want to evaluate at'''
@@ -18,20 +17,22 @@ def driver():
     Nint = 10
     
     '''evaluate the linear spline'''
-    yeval = eval_lin_spline(xeval,a,b,f,Nint)
+    yeval = eval_lin_spline(xeval, Neval, a, b, f, Nint)
     
     ''' evaluate f at the evaluation points'''
     fex = np.zeros(Neval)
     for j in range(Neval):
-      fex(j) = f(xeval(j)) 
-      
-    plt.plot(xeval,yeval)
-    plt.show()   
-     
-     
+      fex[j] = f(xeval[j]) 
+
+    
     err = abs(yeval-fex)
-    plt.plot(xeval,err)
-    plt.show()    
+    plt.plot(xeval, err, label='Error Function', color='red')
+      
+    plt.plot(xeval, yeval, label='Approx Function with Linear Spine', color='blue')
+    plt.plot(xeval, fex, label='True Function', color='green')
+    plt.legend()
+    plt.show()   
+       
 
 
 def line_evaluator(x0, f0, x1, f1, alpha):
@@ -50,21 +51,20 @@ def eval_lin_spline(xeval,Neval,a,b,f,Nint):
         '''find indices of xeval in interval (xint(jint),xint(jint+1))'''
         '''let ind denote the indices in the intervals'''
         '''let n denote the length of ind'''
-        
         '''temporarily store your info for creating a line in the interval of 
          interest'''
-        a1= xint(jint)
-        fa1 = f(a1)
-        b1 = xint(jint+1)
-        fb1 = f(b1)
         
-        for kk in range(n):
-           '''use your line evaluator to evaluate the lines at each of the points 
-           in the interval'''
-           '''yeval(ind(kk)) = call your line evaluator at xeval(ind(kk)) with 
-           the points (a1,fa1) and (b1,fb1)'''
+        a1 = xint[jint]
+        fa1 = f(a1)
+        b1 = xint[jint+1]
+        fb1 = f(b1)
 
-           yeval[kk] = line_evaluator(a1, fa1, b1, fb1, xeval[kk])
+        n = np.linspace(a1, b1, Neval)
+
+        for kk, jj in enumerate(n):
+            yeval[kk] = line_evaluator(a1, fa1, b1, fb1, jj)
+
+    return yeval
            
            
 if __name__ == '__main__':
