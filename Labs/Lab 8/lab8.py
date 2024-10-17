@@ -46,7 +46,7 @@ def eval_lin_spline(xeval,Neval,a,b,f,Nint):
    
     '''create vector to store the evaluation of the linear splines'''
     yeval = np.zeros(Neval) 
-    
+
     for jint in range(Nint):
         '''find indices of xeval in interval (xint(jint),xint(jint+1))'''
         '''let ind denote the indices in the intervals'''
@@ -59,10 +59,16 @@ def eval_lin_spline(xeval,Neval,a,b,f,Nint):
         b1 = xint[jint+1]
         fb1 = f(b1)
 
-        n = np.linspace(a1, b1, Neval)
+        ind = np.where((xeval > a1) & (xeval <= b1))
+        xloc = xeval[ind]
+        n = len(xloc)
 
-        for kk, jj in enumerate(n):
-            yeval[kk] = line_evaluator(a1, fa1, b1, fb1, jj)
+        yloc = np.zeros(len(xloc))
+
+        for kk in range(n):
+            yloc[kk] = line_evaluator(a1, fa1, b1, fb1, xloc[kk])
+
+        yeval[ind] = yloc            
 
     return yeval
            
