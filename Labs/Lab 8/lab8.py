@@ -59,18 +59,18 @@ def eval_lin_spline(xeval,Neval,a,b,f,Nint):
         b1 = xint[jint+1]
         fb1 = f(b1)
 
-        ind = np.where((xeval > a1) & (xeval <= b1))
-        xloc = xeval[ind]
+        ind = np.where((xeval > a1) & (xeval <= b1)) # find indicies in interval [a1, b1]
+        xloc = xeval[ind] # store subset of points in interval [a1, b1]
         n = len(xloc)
 
         yloc = np.zeros(len(xloc))
 
-        for kk in range(n):
+        for kk in range(n): # loop over all xeval points in interval [a1, b1] and plot y for these points
             yloc[kk] = line_evaluator(a1, fa1, b1, fb1, xloc[kk])
 
-        yeval[ind] = yloc            
+        yeval[ind] = yloc # add spline to overall y plot for this nodes         
 
-    return yeval
+    return yeval 
            
            
 if __name__ == '__main__':
