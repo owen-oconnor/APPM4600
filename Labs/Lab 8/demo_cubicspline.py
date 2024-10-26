@@ -51,9 +51,8 @@ def create_natural_spline(yint,xint,N):
     b = np.zeros(N+1)
 #  vector values
     h = np.zeros(N+1)
-    h[0] = xint[i]-xint[i-1]  
     for i in range(1,N):
-       h[i] = xint[i+1] - xint[i]
+       h[i-1] = xint[i] - xint[i-1]
        b[i] = (yint[i+1]-yint[i])/h[i] - (yint[i]-yint[i-1])/h[i-1]
 
 #  create the matrix A so you can solve for the M values
@@ -84,7 +83,7 @@ def eval_local_spline(xeval,xi,xip,Mi,Mip,C,D):
     return yeval 
     
     
-def  eval_cubic_spline(xeval,Neval,xint,Nint,M,C,D):
+def eval_cubic_spline(xeval,Neval,xint,Nint,M,C,D):
     
     yeval = np.zeros(Neval+1)
     

@@ -17,7 +17,7 @@ def driver():
         yint = f(xint)
         ydint = fd(xint)
 
-        xint_cheb = np.array([np.cos(2*j + 1) * np.pi / 2*(Nint) for j in range(Nint+1)])
+        xint_cheb = (a + b) / 2 + (b - a) / 2 * np.array([np.cos(np.pi*(2*j + 1) / (2*(Nint+1))) for j in range(Nint+1)])
         yint_cheb = f(xint_cheb)
         ydint_cheb = fd(xint_cheb)
 
@@ -36,15 +36,14 @@ def driver():
 
         '''CUBIC SPLINE'''
 
-        '''(M,C,D) = create_natural_spline(yint,xint,Nint)
+        (M,C,D) = create_natural_spline(yint,xint,Nint)
         #  evaluate the cubic spline     
-        yeval_cub = eval_cubic_spline(xeval,Neval,xint,Nint,M,C,D)'''
+        yeval_cub = eval_cubic_spline(xeval,Neval,xint,Nint,M,C,D)
 
         ''' create vector with exact values'''
         fex = f(xeval)
     
     
-        plt.figure()
         plt.plot(xeval,fex,color='red', label='True Function')
         plt.plot(xeval,yevalL,color='blue',label=f'Lagrange Int') 
         plt.plot(xeval,yevalH,color='black',label=f'Hermite Int')
@@ -61,14 +60,15 @@ def driver():
          
         errL = abs(yevalL-fex)
         errH = abs(yevalH-fex)
-        #err_cub = abs(yeval_cub-fex)
-        plt.semilogy(xeval,errL,color='blue',label='Lagrange')
-        plt.semilogy(xeval,errH,color='black',label='Hermite')
-        #plt.semilogy(xeval,err_cub,'ro--',label='absolute error')
+        errL_cheb = abs(yevalL_cheb - fex)
+        errH_cheb = abs(yevalH_cheb - fex)
 
-        plt.title(f'Errors of Lagrange, Hermite, Cubic Spline for n={Nint}')
-        plt.legend()
-        plt.show()  
+        plt.semilogy(xeval,errL,color='blue',label=f'Lagrange Error') 
+        plt.semilogy(xeval,errH,color='black',label=f'Hermite Error')
+        plt.semilogy(xeval, errL_cheb, color='purple', label=f'Lagrange w/ Cheb Error')
+        plt.semilogy(xeval, errH_cheb, color='green', label='Hermite w/ Cheb Error')
+
+        plt.title(f'Errors of Lagrange, Hermite, Cubic Spline for n={Nint}') 
         plt.legend()
         plt.show()   
 
@@ -168,10 +168,9 @@ def create_natural_spline(yint,xint,N):
 #    create the right  hand side for the linear system
     b = np.zeros(N+1)
 #  vector values
-    h = np.zeros(N+1)
-    h[0] = xint[i]-xint[i-1]  
+    h = np.zeros(N+1) 
     for i in range(1,N):
-       h[i] = xint[i+1] - xint[i]
+       h[i-1] = xint[i] - xint[i-1]
        b[i] = (yint[i+1]-yint[i])/h[i] - (yint[i]-yint[i-1])/h[i-1]
 
 #  create the matrix A so you can solve for the M values
