@@ -34,11 +34,11 @@ def driver():
             yevalH_cheb[kk] = eval_hermite(xeval[kk],xint_cheb,yint_cheb,ydint_cheb,Nint)
 
 
-        '''CUBIC SPLINE'''
+        '''CUBIC SPLINE???'''
 
-        (M,C,D) = create_natural_spline(yint,xint,Nint)
+        '''(M,C,D) = create_natural_spline(yint,xint,Nint)
         #  evaluate the cubic spline     
-        yeval_cub = eval_cubic_spline(xeval,Neval,xint,Nint,M,C,D)
+        yeval_cub = eval_cubic_spline(xeval,Neval,xint,Nint,M,C,D)'''
 
         ''' create vector with exact values'''
         fex = f(xeval)
@@ -68,7 +68,7 @@ def driver():
         plt.semilogy(xeval, errL_cheb, color='purple', label=f'Lagrange w/ Cheb Error')
         plt.semilogy(xeval, errH_cheb, color='green', label='Hermite w/ Cheb Error')
 
-        plt.title(f'Errors of Lagrange, Hermite, Cubic Spline for n={Nint}') 
+        plt.title(f'Errors of Lagrange and Hermite for n={Nint}') 
         plt.legend()
         plt.show()   
 
