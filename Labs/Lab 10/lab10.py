@@ -18,6 +18,20 @@ def eval_legendre(n, x):
     
     return p
 
+def eval_chebychev(n, x):
+    """
+    Evaluates Chebyshev polynomials up to order n at a given x using three term recursion.
+    Returns an array of length n+1 containing the values of the polynomials.
+    """   
+    T = np.zeros(n+1)
+    T[0] = 1
+
+    if n > 0:
+        T[1] = x
+
+    for i in range(1, n):
+        T[i+1] = 2*x*T[i] - T[i-1]
+
 def coefficient(f, phi_j, phi_j_sq, w, a, b):
     num_integrand = lambda x: phi_j(x) * f(x) * w(x)
     numerator, err = quad(num_integrand, a, b)
@@ -45,10 +59,11 @@ def eval_legendre_expansion(f, a, b, w, n, x):
     return pval
 
 def driver():
-    f = lambda x: math.exp(x)  
+    f = lambda x: 1 / (1+x**2)  
     a, b = -1, 1              
-    w = lambda x: 1.0          
-    n = 2                      
+    w = lambda x: 1.0       
+    w2 = lambda x: 1/np.sqrt(1-x**2)   
+    n = 3                      
     N = 1000                   
 
     xeval = np.linspace(a, b, N+1)
@@ -58,6 +73,7 @@ def driver():
     plt.figure()
     plt.plot(xeval, fex, label='f(x)')
     plt.plot(xeval, pval, label='Expansion')
+    plt.title("Exact f(x) vs Legendre Expansion")
     plt.legend()
     plt.show()
 
