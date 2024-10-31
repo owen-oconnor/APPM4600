@@ -86,19 +86,23 @@ def driver():
     N = 1000                   
 
     xeval = np.linspace(a, b, N+1)
-    pval = np.array([eval_chebychev_expansion(f, a, b, w2, n, x) for x in xeval])
+    pval_leg = np.array([eval_legendre_expansion(f, a, b, w, n, x) for x in xeval])
+    pval_cheb = np.array([eval_chebychev_expansion(f, a, b, w2, n, x) for x in xeval])
     fex = np.array([f(x) for x in xeval])
 
     plt.figure()
     plt.plot(xeval, fex, label='f(x)')
-    plt.plot(xeval, pval, label='Expansion')
-    plt.title("Exact f(x) vs Legendre Expansion")
+    plt.plot(xeval, pval_leg, label='Legendre Expansion')
+    plt.plot(xeval, pval_cheb, label='Chebychev Expansion')
+    plt.title("Exact f(x) vs Legendre vs Chebychev Expansions")
     plt.legend()
     plt.show()
 
-    err = np.abs(pval - fex)
+    err_leg = np.abs(pval_leg - fex)
+    err_cheb = np.abs(pval_cheb-fex)
     plt.figure()
-    plt.semilogy(xeval, err, label='Error Function')
+    plt.semilogy(xeval, err_leg, label='Legendre Error')
+    plt.semilogy(xeval, err_cheb, label='Chebycheb Error')
     plt.legend()
     plt.show()
 
