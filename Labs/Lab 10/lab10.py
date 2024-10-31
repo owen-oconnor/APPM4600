@@ -32,6 +32,8 @@ def eval_chebychev(n, x):
     for i in range(1, n):
         T[i+1] = 2*x*T[i] - T[i-1]
 
+    return T
+
 def coefficient(f, phi_j, phi_j_sq, w, a, b):
     num_integrand = lambda x: phi_j(x) * f(x) * w(x)
     numerator, err = quad(num_integrand, a, b)
@@ -58,6 +60,23 @@ def eval_legendre_expansion(f, a, b, w, n, x):
 
     return pval
 
+def eval_chebychev_expansion(f, a, b, w, n, x):
+    """
+    Evaluates the Legendre polynomial expansion of f at point x over [a, b] with order n.
+    """
+    p = eval_chebychev(n, x)
+    pval = 0.0
+
+    for j in range(n+1):
+        phi_j = lambda x: eval_chebychev(j, x)[j]
+        phi_j_sq = lambda x: phi_j(x) ** 2
+
+        aj = coefficient(f, phi_j, phi_j_sq, w, a, b)
+        
+        pval += aj*p[j]
+
+    return pval
+
 def driver():
     f = lambda x: 1 / (1+x**2)  
     a, b = -1, 1              
@@ -67,7 +86,7 @@ def driver():
     N = 1000                   
 
     xeval = np.linspace(a, b, N+1)
-    pval = np.array([eval_legendre_expansion(f, a, b, w, n, x) for x in xeval])
+    pval = np.array([eval_chebychev_expansion(f, a, b, w2, n, x) for x in xeval])
     fex = np.array([f(x) for x in xeval])
 
     plt.figure()
