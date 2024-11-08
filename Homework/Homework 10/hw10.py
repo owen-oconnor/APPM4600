@@ -21,10 +21,10 @@ pade_42 = lambda x: (x + (6/120 - 1/6)*x**3) / (1 + 6*x**2/120) # identical to p
 f_pade42 = pade_42(x)
 pade42_err = np.abs(f_exact - f_pade42)
 
-plt.semilogy(x, maclaurin_err, label='Maclaurin Series Error')
-plt.semilogy(x, pade33_err, label='Pade Approx Error (m=3, n=3)')
-plt.semilogy(x, pade24_err, label='Pade Approx (m=2, n=4)')
-plt.semilogy(x, pade42_err, label='Pade Approx Error (m=4, n=2)')
+plt.plot(x, maclaurin_err, label='Maclaurin Series Error')
+plt.plot(x, pade33_err, label='Pade Approx Error (m=3, n=3)')
+plt.plot(x, pade24_err, label='Pade Approx (m=2, n=4)')
+plt.plot(x, pade42_err, label='Pade Approx Error (m=4, n=2)')
 
 plt.legend()
 plt.title('Errors of Maclaurin and Pade Approximations')
