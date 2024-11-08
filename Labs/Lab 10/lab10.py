@@ -82,7 +82,7 @@ def driver():
     a, b = -1, 1              
     w = lambda x: 1.0       
     w2 = lambda x: 1/np.sqrt(1-x**2)   
-    n = 3                      
+    n = 5                      
     N = 1000                   
 
     xeval = np.linspace(a, b, N+1)
