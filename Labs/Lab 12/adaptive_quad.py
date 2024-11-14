@@ -6,17 +6,51 @@ import numpy as np
 # the following three can be passed
 # as the method parameter to the main adaptive_quad() function
 
-def eval_composite_trap(M,a,b,f):
-  """
-  put code from prelab with same returns as gauss_quad
-  you can return None for the weights
-  """
+def eval_composite_trap(M, a, b, f):
+    """
+    Composite Trapezoidal Rule for numerical integration.
+    
+    Input:
+      M - number of quadrature nodes
+      a, b - interval [a,b]
+      f - function to integrate
+      
+    Output:
+      I_hat - approx integral
 
-def eval_composite_simpsons(M,a,b,f):
-  """
-  put code from prelab with same returns as gauss_quad
-  you can return None for the weights
-  """
+    """
+    x = np.linspace(a, b, M)
+    h = (b - a) / (M - 1)
+    I_hat = h * (0.5 * (f(x[0]) + f(x[-1])) + np.sum(f(x[1:-1])))
+    return I_hat, x, None
+
+'''f = lambda x: x**2
+I, x, _ = eval_composite_trap(100, -1, 1, f)
+print(I)'''
+
+
+def eval_composite_simpsons(M, a, b, f):
+    """
+    Composite Simpson's Rule for numerical integration.
+    
+    Input:
+      M - number of quadrature nodes (must be even)
+      a, b - interval [a,b]
+      f - function to integrate
+      
+    Output:
+      I_hat - approx integral
+
+    """
+
+    if M % 2 == 1:
+       pass
+    
+    x = np.linspace(a, b, M)
+    h = (b - a) / (M - 1)
+    I_hat = (h / 3) * (f(x[0]) + f(x[-1]) + 4 * np.sum(f(x[1:-1:2])) + 2 * np.sum(f(x[2:-1:2])))
+    print(x, M, len(x))
+    return I_hat, x, None
 
 def eval_gauss_quad(M,a,b,f):
   """
@@ -58,15 +92,15 @@ def adaptive_quad(a,b,f,tol,M,method):
   left_p = np.zeros((maxit,))
   right_p = np.zeros((maxit,))
   s = np.zeros((maxit,1))
-  left_p[0] = a; right_p[0] = b;
+  left_p[0] = a; right_p[0] = b
   # initial approx and grid
-  s[0],x,_ = method(M,a,b,f);
+  s[0],x,_ = method(M,a,b,f)
   # save grid
   X = []
   X.append(x)
-  j = 1;
-  I = 0;
-  nsplit = 1;
+  j = 1
+  I = 0
+  nsplit = 1
   while j < maxit:
     # get midpoint to split interval into left and right
     c = 0.5*(left_p[j-1]+right_p[j-1]);
