@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
+from scipy.linalg import solve
 
 
 f = lambda x: 1 / (1 + x**2)
@@ -34,9 +35,22 @@ print(f'The approximate integral using the built in scipy quad is {I_scipy}')
 print(f'The approximate integral using the built in scipy with tol={1e-4} is {I_scipy_lowtol}')
 
 f2 = lambda x: x*np.cos(1/x)
-a2 = 0.1
+a2 = 0
 b2 = 1
 n2 = 5
 
 I2_simps = composite_simpsons(a2, b2, n2, f2)
 print(f'The approximate integral with composite Simpsons method is {I2_simps}')
+
+
+'''question 3'''
+
+A = np.array([[1, 2*np.sqrt(2), 8],
+               [1, 4, 16],
+               [1, 1, 1]])
+B = np.array([0,
+                0,
+                1])
+
+X = solve(A, B)
+print(X)
