@@ -20,13 +20,9 @@ def eval_composite_trap(M, a, b, f):
 
     """
     x = np.linspace(a, b, M)
-    h = (b - a) / (M - 1)
+    h = (b - a) / (M)
     I_hat = h * (0.5 * (f(x[0]) + f(x[-1])) + np.sum(f(x[1:-1])))
     return I_hat, x, None
-
-'''f = lambda x: x**2
-I, x, _ = eval_composite_trap(100, -1, 1, f)
-print(I)'''
 
 
 def eval_composite_simpsons(M, a, b, f):
@@ -42,14 +38,9 @@ def eval_composite_simpsons(M, a, b, f):
       I_hat - approx integral
 
     """
-
-    if M % 2 == 1:
-       pass
-    
     x = np.linspace(a, b, M)
     h = (b - a) / (M - 1)
     I_hat = (h / 3) * (f(x[0]) + f(x[-1]) + 4 * np.sum(f(x[1:-1:2])) + 2 * np.sum(f(x[2:-1:2])))
-    print(x, M, len(x))
     return I_hat, x, None
 
 def eval_gauss_quad(M,a,b,f):

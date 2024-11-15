@@ -18,11 +18,10 @@ a = 0.; b = 1.
 #        make sure to adjust I_true values if using different interval!
 #f = lambda x: np.log(x)**2; I_true = 2; labl = '$\log^2(x)$'
 #f = lambda x: 1./(np.power(x,(1./5.))); I_true = 5./4.; labl = '$\\frac{1}{x^{1/5}}$'
-#f = lambda x: np.exp(np.cos(x)); I_true = 2.3415748417130531; labl = '$\exp(\cos(x))$'
+f = lambda x: np.exp(np.cos(x)); I_true = 2.3415748417130531; labl = '$\exp(\cos(x))$'
 #f = lambda x: x**20; I_true = 1./21.; labl = '$x^{20}$'
 # below is for a=0.1, b = 2
 #f = lambda x: np.sin(1./x); I_true = 1.1455808341; labl = '$\sin(1/x)$'
-f = lambda x: x; I_true = 1/2
 
 # absolute tolerance for adaptive quad 
 tol = 1e-14
